@@ -59,7 +59,6 @@
       console.error(`[${i + 1}/${jobIds.length}] อนุมัติล้มเหลว: ${id} (Status: ${result.status})`);
       failCount++;
       
-      // ถ้าระบบตอบกลับเป็น 429 (Too Many Requests) แปลว่าเรายิงเร็วไป ให้หน่วงเวลาพักยาวๆ
       if (result.status === 429) {
           console.warn("เซิร์ฟเวอร์เตือนว่ายิงเร็วเกินไป! พักเบรก 5 วินาที...");
           await new Promise(r => setTimeout(r, 5000));
