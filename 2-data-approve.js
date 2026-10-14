@@ -43,31 +43,50 @@
     }
   };
 
-  console.log(`กำลังเริ่มยิงคำสั่งอนุมัติแบบหน่วงเวลาเพื่อป้องกันการโดนบล็อก...`);
+  console.log(`🚀 กำลังเริ่มยิงคำสั่งอนุมัติแบบจัดกลุ่ม (Batching)...`);
 
   let successCount = 0;
   let failCount = 0;
+  
+  // ตั้งค่าความเร็วตรงนี้
+  const BATCH_SIZE = 20; 
+  const DELAY_BETWEEN_BATCHS = 1000; 
 
-  for (let i = 0; i < jobIds.length; i++) {
-    const id = jobIds[i];
-    const result = await approveJobAPI(id);
+  for (let i = 0; i < jobIds.length; i += BATCH_SIZE) {
+    // หั่นข้อมูลมาทีละชุดตาม BATCH_SIZE
+    const batch = jobIds.slice(i, i + BATCH_SIZE);
+    console.log(`\n กำลังประมวลผลกลุ่มที่ ${Math.floor(i / BATCH_SIZE) + 1} (งานที่ ${i + 1} ถึง ${Math.min(i + BATCH_SIZE, jobIds.length)})...`);
 
-    if (result.success) {
-      console.log(`[${i + 1}/${jobIds.length}] อนุมัติสำเร็จ: ${id} (Status: ${result.status})`);
-      successCount++;
-    } else {
-      console.error(`[${i + 1}/${jobIds.length}] อนุมัติล้มเหลว: ${id} (Status: ${result.status})`);
-      failCount++;
-      
-      if (result.status === 429) {
-          console.warn("เซิร์ฟเวอร์เตือนว่ายิงเร็วเกินไป! พักเบรก 5 วินาที...");
-          await new Promise(r => setTimeout(r, 5000));
+    // ส่งคำสั่งพร้อมกันเฉพาะในกลุ่มนี้
+    const promises = batch.map(id => approveJobAPI(id));
+    const results = await Promise.all(promises);
+
+    let hasRateLimit = false;
+
+    // เช็คผลลัพธ์ของแต่ละงานในกลุ่ม
+    results.forEach((result, index) => {
+      const globalIndex = i + index + 1;
+      if (result.success) {
+        console.log(`[${globalIndex}/${jobIds.length}] อนุมัติสำเร็จ: ${result.id} (Status: ${result.status})`);
+        successCount++;
+      } else {
+        console.error(`[${globalIndex}/${jobIds.length}] อนุมัติล้มเหลว: ${result.id} (Status: ${result.status})`);
+        failCount++;
+        
+        if (result.status === 429) {
+          hasRateLimit = true;
+        }
       }
-    }
+    });
 
-    await new Promise(resolve => setTimeout(resolve, 100)); 
+    if (hasRateLimit) {
+      console.warn("⚠️ เซิร์ฟเวอร์เตือนว่ายิงเร็วเกินไป (429)! พักเบรก 5 วินาที...");
+      await new Promise(r => setTimeout(r, 5000));
+    } else {
+      await new Promise(r => setTimeout(r, DELAY_BETWEEN_BATCHS));
+    }
   }
 
-  console.log("\n ดำเนินการเสร็จสิ้นทั้งหมดแล้ว!");
+  console.log("ดำเนินการเสร็จสิ้นทั้งหมดแล้ว!");
   console.log(`สรุป: สำเร็จ ${successCount} รายการ, ล้มเหลว ${failCount} รายการ`);
 })();
