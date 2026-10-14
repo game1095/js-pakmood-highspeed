@@ -1,5 +1,5 @@
 (async function () {
-  const sheetUrl = "https://docs.google.com/spreadsheets/d/1RM1CowBCkBChaO8Qhv1kUdc-oxVP51LIf_ChYqvobLA/export?format=csv&gid=0";
+  const sheetUrl = "-------------------------------------/export?format=csv&gid=0";
   let jobIds = [];
   try {
     const response = await fetch(sheetUrl);
