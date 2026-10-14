@@ -49,7 +49,7 @@
   let failCount = 0;
   
   // ตั้งค่าความเร็วตรงนี้
-  const BATCH_SIZE = 20; 
+  const BATCH_SIZE = 10; 
   const DELAY_BETWEEN_BATCHS = 1000; 
 
   for (let i = 0; i < jobIds.length; i += BATCH_SIZE) {
