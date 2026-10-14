@@ -65,7 +65,7 @@
       }
     }
 
-    await new Promise(resolve => setTimeout(resolve, 500)); 
+    await new Promise(resolve => setTimeout(resolve, 100)); 
   }
 
   console.log("\n ดำเนินการเสร็จสิ้นทั้งหมดแล้ว!");
