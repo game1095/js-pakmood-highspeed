@@ -1,7 +1,7 @@
 async function fetchAllLongIdsAndSendToSheet() {
   // web url google app script
   const WEB_APP_URL =
-    "https://script.google.com/macros/s/AKfycbyb9ZKv34tF2acw-6vPcUw3VefG0Cc91WzHFCevncPOTlw4YOdcyoXebhJPztfComuF1g/exec";
+    "----------------------------------";
 
   // api url
   const API_URL =
@@ -10,7 +10,7 @@ async function fetchAllLongIdsAndSendToSheet() {
   // Token
   const MY_TOKEN = "-------- ใส่ token --------";
 
-  const groupId = "6a3eddfe182f2ad87f670ecd";
+  const groupId = "----------------------------------";
 
   console.log("🚀 เริ่มกระบวนการดึงข้อมูลรหัสยาวจาก API...");
 
