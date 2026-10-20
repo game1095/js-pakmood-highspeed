@@ -1,4 +1,9 @@
 (async function () {
+
+  console.log(
+  "%c ✝ S a i n t  S e b a s t i a n ✝ ", 
+  "color: #FFFFFF; background-color: #000000; font-family: 'Georgia', serif; font-size: 26px; font-weight: bold; font-style: italic; text-shadow: 0 0 5px #FFFFFF, 0 0 15px #FFD700, 0 0 25px #FFD700, 0 0 40px #FF8C00; padding: 15px; border-top: 2px solid #FFD700; border-bottom: 2px solid #FFD700;"
+);
   const sheetUrl = "-------------------------------------/export?format=csv&gid=0";
   let jobIds = [];
   try {
